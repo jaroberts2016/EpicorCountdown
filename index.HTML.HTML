@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Countdown Timer</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+          background-color: #f4f4f9;
+      }
+      .container {
+          text-align: center;
+          background-color: #fff;
+          padding: 30px;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+      }
+      img.logo {
+          max-width: 150px;
+      }
+      .time {
+          font-size: 2em;
+          margin: 0;
+      }
+      input[type="number"] {
+          padding: 10px;
+          font-size: 16px;
+          width: 100px;
+          margin-right: 10px;
+      }
+      button {
+          padding: 10px 20px;
+          font-size: 16px;
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          cursor: pointer;
+      }
+      button:hover {
+          background-color: #45a049;
+      }
+      .message {
+          font-size: 1.2em;
+          color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header section with logo and time on the same line -->
+      <div class="header">
+        <img class="logo" src="https://www.panorama-consulting.com/wp-content/uploads/2021/09/Epicor_Logo_Teal_RGB.png" alt="Epicor Logo" />
+        <div class="time" id="timeDisplay">00:00</div>
+      </div>
+      
+      <!-- Timer input and button -->
+      <input type="number" id="timeInput" placeholder="Minutes" min="1" />
+      <button onclick="startCountdown()">Start Timer</button>
+      <div class="message" id="message"></div>
+    </div>
+
+    <script>
+      let countdown;
+
+      // Function to format time into MM:SS
+      function formatTime(seconds) {
+          const minutes = Math.floor(seconds / 60);
+          const remainingSeconds = seconds % 60;
+          return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+      }
+
+      function startCountdown() {
+          const timeInput = document.getElementById('timeInput');
+          const timeDisplay = document.getElementById('timeDisplay');
+          const message = document.getElementById('message');
+
+          // Clear any previous countdown
+          clearInterval(countdown);
+
+          // Get time in minutes and convert to seconds
+          let timeLeft = parseInt(timeInput.value) * 60;
+
+          // Check if time is valid
+          if (isNaN(timeLeft) || timeLeft <= 0) {
+              message.textContent = "Please enter a valid number greater than 0!";
+              timeDisplay.textContent = "00:00";  // Reset display
+              return;
+          }
+
+          message.textContent = ""; // Clear any previous message
+          timeDisplay.textContent = formatTime(timeLeft); // Initialize the display with time entered
+
+          // Update the countdown every second
+          countdown = setInterval(function() {
+              timeLeft--;
+              timeDisplay.textContent = formatTime(timeLeft);
+
+              if (timeLeft <= 0) {
+                  clearInterval(countdown);
+                  message.textContent = "Time's up!";
+                  alert("Time's up!");
+              }
+          }, 1000);
+      }
+    </script>
+  </body>
+</html>
